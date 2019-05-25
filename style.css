@@ -1,48 +1,72 @@
-body {
-  margin: 0;
-  padding: 0;
-}
+@import url('https://fonts.googleapis.com/css?family=Archivo+Black');
 
-@font-face {
-  font-family: 'ubuntu';
-  font-style: italic;
-  font-weight: 300;
-  src: local("Lato Light Italic"), local("Lato-LightItalic"), url(https://fonts.gstatic.com/s/ubuntucondensed/v8/u-4k0rCzjgs5J7oXnJcM_0kACGMtT-Dfqw.woff2) format("woff2");
-}
-.wrapper {
-  position: absolute;
-  width: 100%;
+html, body {
   height: 100%;
-  text-align: center;
-  background-color: transparent;
-  background-image: linear-gradient(0deg, #bbd3e2, #eedcfa);
-  *background-image: url("http://sxrdev.com/uploads/images/code.png");
-  background-size: cover;
 }
-.wrapper h1 {
-  color: #fff;
-  font-size: 92px;
-  line-height: 8.3;
-  font-family: 'ubuntu';
-  text-transform: uppercase;
-  margin-top: 34px;
-  font-weight: 300;
-  font-family: 'Josefin Sans',sans-serif;
-  background: linear-gradient(to right, #697dff 10%, #fff 50%, #5bdaff 60%);
-  background-size: auto auto;
-  background-clip: border-box;
-  background-size: 200% auto;
-  color: #fff;
-  background-clip: text;
-  text-fill-color: transparent;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textclip 1.5s linear infinite;
-  display: inline-block;
+body {
+  background: black;
+  font-family: 'Archivo Black', sans-serif;
 }
 
-@keyframes textclip {
-  to {
-    background-position: 200% center;
+.glitch-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glitch {
+  @offset1: 2px;
+  @offset2: -2px;
+  @highlight1: #49FC00;
+  @highlight2: spin(@highlight1, 180);
+  
+  color: white;
+  font-size: 150px;
+  text-transform: upercase;
+  position: relative;
+  display: inline-block;
+  
+  &::before,
+  &::after  {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
   }
+  
+  &::before {
+    left: @offset1;
+    text-shadow: -2px 0 @highlight1;
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+  }
+  
+  &::after {
+    left: @offset2;
+    text-shadow: -2px 0 @highlight2;
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitch-anim 2.5s infinite linear alternate-reverse;
+  }
+}
+
+.glitch-frames (@n: 20, @index: 0) when (@index <= @n) {
+  @keyframeSel: percentage(@index/@n);
+  @rand1: unit(round(`Math.random()*150`),px);
+  @rand2: unit(round(`Math.random()*150`), px);
+  @{keyframeSel} {
+    clip: rect(@rand1, 9999px, @rand2, 0);
+  }
+  .glitch-frames(@n, (@index + 1));
+}
+
+@keyframes glitch-anim {
+  .glitch-frames(24);
+}
+
+@keyframes glitch-anim-2 {
+  .glitch-frames(30,2);
 }
